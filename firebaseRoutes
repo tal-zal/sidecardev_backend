@@ -3,30 +3,72 @@ const router = express.Router();
 
 const rtDatabase = require('./firebase'); // Import the initialized Firebase app as created in the other file
 
-// Define a route that interacts with Firestore
-// router.get('/data', async (req, res) => {
-// //   res.send(firebase.firebaseConfig.projectId)
-//     res.send("It works!!!");
-// });
-
+function getDate(){
+    let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    // current year
+    let year = date_ob.getFullYear();
+    
+    return (year + "-" + month + "-" + date);
+}
 
 // Add comment to the realtime database
-router.post('/commentPost', (req, res) => {
-    const postData = req.body;
+router.post('/databasePost', (req, res) => {
 
-    // Path of the database to write to
-    const dataRef = rtDatabase.ref('dataTest');
+    const date = getDate();
 
-    dataRef.push(postData, (error) => {
-        if (error) {
-            res.send("There was an error sending " + postData + "to the API.");
+    // Retrieve data from the post
+    const postData = req.query;
+    const username = postData.username;
+    const message = postData.message;
+    const lobbyID = postData.lobbyID;
+    // Either "code" or "message" depending on the post type
+    const postType = postData.postType;
+
+    // Add a new message to the database
+    if (postType == "message") {
+        const textObject = {'username' : username, 'message' : message};
+        // Path of the database to write to
+        const dataRef = rtDatabase.ref(date + "/" + lobbyID + "/messages/");
+        dataRef.push(textObject, (error) => {
+            if (error) {
+                res.send("There was an error sending " + postData + "to the API.");
+            }
+            else {
+                res.send(postData);
+            }
+        })
+    // Update the "code" object in the database
+    } else if (postType == "code")
+    {
+        const dataRef = rtDatabase.ref(date + "/" + lobbyID + "/code/");
+        try {
+
+            dataRef.update(message, (error) => {
+            if (error) {
+
+                res.send("There was an error sending " + postData + "to the API.");
+            }
+            else {
+                res.send(postData);
+            }
+            })
         }
-        else {
-            res.send(postData);
-        }
-    })
+        catch (error) // If there is nothing there to update, set instead of update
+        {
+            dataRef.set(message, (error) => {
+            if (error) {
 
-    res.send(postData);
+                res.send("There was an error sending " + postData + "to the API.");
+            }
+            else {
+                res.send(postData);
+            }
+            })
+        }
+    }
 })
 
 // Add 
