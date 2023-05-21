@@ -1,5 +1,7 @@
+// This file exports firebase and firebaseDatabase objects
 const firebase = require('firebase/app');
-require('firebase/firestore'); // Import additional Firebase services if needed
+// require('firebase/firestore'); // Import additional Firebase services if needed
+require('firebase/database');
 
 const firebaseConfig = {
     apiKey: "AIzaSyBvfOpgYeasmMuFl_cNFf8NZUhZ6yBsD3Q",
@@ -12,7 +14,9 @@ const firebaseConfig = {
     measurementId: "G-NZS4NHGYMH"
   };
 
-  firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
-// Export the initialized Firebase app
-module.exports = firebase, firebaseConfig;
+// const rtDatabase = firebase.database();
+
+// Export the initialized Firebase app's database
+module.exports = firebase;
