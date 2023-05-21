@@ -1,5 +1,9 @@
 const express = require('express');
+var bodyParser = require('body-parser')
 const router = express.Router();
+
+// create application/json parser
+var jsonParser = bodyParser.json()
 
 const rtDatabase = require('./firebase'); // Import the initialized Firebase app as created in the other file
 
@@ -15,29 +19,32 @@ function getDate(){
 }
 
 // Add comment to the realtime database
-router.post('/databasePost', (req, res) => {
+router.post('/databasePost', jsonParser, (req, res) => {
 
     const date = getDate();
 
     // Retrieve data from the post
-    const postData = req.query;
-    const username = postData.username;
-    const message = postData.message;
-    const lobbyID = postData.lobbyID;
+    const postDataParam = req.query;
+    const postDataBody = req.body;
+
+    const username = postDataParam.username;
+    const data = postDataBody.data;
+
+    const lobbyID = postDataParam.lobbyID;
     // Either "code" or "message" depending on the post type
-    const postType = postData.postType;
+    const postType = postDataParam.postType;
 
     // Add a new message to the database
     if (postType == "message") {
-        const textObject = {'username' : username, 'message' : message};
+        const textObject = {'username' : username, 'message' : data};
         // Path of the database to write to
         const dataRef = rtDatabase.ref(date + "/" + lobbyID + "/messages/");
         dataRef.push(textObject, (error) => {
             if (error) {
-                res.send("There was an error sending " + postData + "to the API.");
+                res.send("There was an error sending " + postDataParam + "to the API.");
             }
             else {
-                res.send(postData);
+                res.send(postDataParam);
             }
         })
     // Update the "code" object in the database
@@ -46,25 +53,25 @@ router.post('/databasePost', (req, res) => {
         const dataRef = rtDatabase.ref(date + "/" + lobbyID + "/code/");
         try {
 
-            dataRef.update(message, (error) => {
+            dataRef.update(data, (error) => {
             if (error) {
 
-                res.send("There was an error sending " + postData + "to the API.");
+                res.send("There was an error sending " + postDataParam + "to the API.");
             }
             else {
-                res.send(postData);
+                res.send(postDataParam);
             }
             })
         }
         catch (error) // If there is nothing there to update, set instead of update
         {
-            dataRef.set(message, (error) => {
+            dataRef.set(data, (error) => {
             if (error) {
 
-                res.send("There was an error sending " + postData + "to the API.");
+                res.send("There was an error sending " + postDataParam + "to the API.");
             }
             else {
-                res.send(postData);
+                res.send(postDataParam);
             }
             })
         }
