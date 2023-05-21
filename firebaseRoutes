@@ -18,7 +18,7 @@ function getDate(){
     return (year + "-" + month + "-" + date);
 }
 
-// Add comment to the realtime database
+// Add comment or change code to the realtime database
 router.post('/databasePost', jsonParser, (req, res) => {
 
     const date = getDate();
@@ -77,10 +77,5 @@ router.post('/databasePost', jsonParser, (req, res) => {
         }
     }
 })
-
-// Add 
-
-
-
 
 module.exports = router;
