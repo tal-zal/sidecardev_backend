@@ -1,0 +1,15 @@
+const express = require('express');
+const router = express.Router();
+
+const firebase = require('./firebase'); // Import the initialized Firebase app as created in the other file
+
+// Define a route that interacts with Firestore
+router.get('/data', async (req, res) => {
+//   res.send(firebase.firebaseConfig.projectId)
+    res.send("It works!!!");
+});
+
+
+
+
+module.exports = router;
