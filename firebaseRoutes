@@ -9,7 +9,8 @@ app.use(cors());
 // create application/json parser
 var jsonParser = bodyParser.json()
 
-const rtDatabase = require('./firebase'); // Import the initialized Firebase app as created in the other file
+const firebase = require('./firebase'); // Import the initialized Firebase app as created in the other file
+const rtDatabase = firebase.database();
 
 function getDate(){
     let date_ob = new Date();
@@ -81,5 +82,18 @@ router.post('/databasePost', jsonParser, (req, res) => {
         }
     }
 })
+
+    // router.get('/databaseGet', jsonParser, (req, res) => {
+    //     // const date = getDate();
+    //     // const postDataParam = req.query;
+    //     // const lobbyID = postDataParam.lobbyID;
+    //     // const dataRef = rtDatabase.ref(date + "/" + lobbyID + "/");
+    //     // console.log(rtDatabase);
+    //     // res.send(rtDatabase);
+    //     // console.log(firebase);
+    //     res.send(firebase);
+    // })
+
+
 
 module.exports = router;

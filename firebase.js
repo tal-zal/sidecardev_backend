@@ -15,9 +15,7 @@ const firebaseConfig = {
   };
 
 firebase.initializeApp(firebaseConfig);
-const rt = firebase.database();
-
 // const rtDatabase = firebase.database();
 
 // Export the initialized Firebase app's database
-module.exports = rt;
+module.exports = firebase, firebaseConfig;
