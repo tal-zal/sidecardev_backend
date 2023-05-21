@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const firebase = require('./firebase'); // Import the initialized Firebase app as created in the other file
+const rtDatabase = require('./firebase'); // Import the initialized Firebase app as created in the other file
 
 // Define a route that interacts with Firestore
 // router.get('/data', async (req, res) => {
@@ -15,7 +15,6 @@ router.post('/commentPost', (req, res) => {
     const postData = req.body;
 
     // Path of the database to write to
-    const rtDatabase = firebase.database();
     const dataRef = rtDatabase.ref('dataTest');
 
     dataRef.push(postData, (error) => {
