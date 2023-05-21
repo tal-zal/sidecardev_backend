@@ -3,6 +3,9 @@ const app = express();
 const firebaseRoutes = require('./firebaseRoutes');
 const chatgptRoutes = require('./chatgpt.js');
 
+// TODO - possibly remove
+const cors = require('cors');
+app.use(cors());
 
 // .../firebase/data -> gets sent to the firebaseRoutes file
 app.use('/firebase', firebaseRoutes);

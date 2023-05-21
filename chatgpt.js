@@ -13,7 +13,7 @@ const chatgptConfig = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-const chatgpt = new OpenAIApi(configuration);
+const chatgpt = new OpenAIApi(chatgptConfig);
 
 // route for prompting chatgpt
 router.post('/chatgpt', jsonParser, async (req, res) => {
@@ -34,7 +34,7 @@ router.post('/chatgpt', jsonParser, async (req, res) => {
         console.log(error.message);
     }
 
-}
+});
 
-// Export the initialized Firebase app's database
+// export chatgpt router
 module.exports = router;
